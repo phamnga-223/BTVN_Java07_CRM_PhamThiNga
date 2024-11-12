@@ -39,18 +39,18 @@
         <div class="cssload-speeding-wheel"></div>
     </div>
     <div id="wrapper">
-      	<!-- Common bars -->
-      	<jsp:include page="common-bars.jsp" />
-      	
+       	<!-- Common bars -->
+       	<jsp:include page="common-bars.jsp"/>
+       	
         <!-- Page Content -->
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row bg-title">
                     <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">Danh sách thành viên</h4>
+                        <h4 class="page-title">Danh sách dự án</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a href="user-add" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a href="groupwork-add.html" class="btn btn-sm btn-success">Thêm mới</a>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -63,26 +63,26 @@
                                     <thead>
                                         <tr>
                                             <th>STT</th>
-                                            <th>Full Name</th>
-                                            <th>Username</th>
-                                            <th>Role</th>
-                                            <th>#</th>
+                                            <th>Tên Dự Án</th>
+                                            <th>Ngày Bắt Đầu</th>
+                                            <th>Ngày Kết Thúc</th>
+                                            <th>Hành Động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${ users }" var="user">
-	                                    	<tr>
-	                                            <td>${ user.id }</td>
-	                                            <td>${ user.fullname }</td>
-	                                            <td>${ user.email }</td>
-	                                            <td>${ user.roleName }</td>
+                                    	<c:forEach items="${ listJobs }" var="job">
+	                                        <tr>
+	                                            <td>${ job.id }</td>
+	                                            <td>${ job.name }</td>
+	                                            <td>${ job.startDate }</td>
+	                                            <td>${ job.endDate }</td>
 	                                            <td>
-	                                                <a href="user-edit?id=${ user.id }" class="btn btn-sm btn-primary">Sửa</a>
-	                                                <a href="users?id=${ user.id }" class="btn btn-sm btn-danger">Xóa</a>
-	                                                <a href="user-detail?id=${ user.id }" class="btn btn-sm btn-info">Xem</a>
+	                                                <a href="#" class="btn btn-sm btn-primary">Sửa</a>
+	                                                <a href="#" class="btn btn-sm btn-danger">Xóa</a>
+	                                                <a href="groupwork-details?id=${ job.id }" class="btn btn-sm btn-info">Xem</a>
 	                                            </td>
 	                                        </tr>
-                                    	</c:forEach>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -105,7 +105,7 @@
     <script src="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
     <!--slimscroll JavaScript -->
     <script src="js/jquery.slimscroll.js"></script>
-    <script src="js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!--Wave Effects -->
     <script src="js/waves.js"></script>
     <!-- Custom Theme JavaScript -->

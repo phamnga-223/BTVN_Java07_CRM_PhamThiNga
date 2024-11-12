@@ -19,7 +19,8 @@ import service.RolesService;
 import service.UsersService;
 
 //urlPatterns : Duong dan se kich hoat filter
-@WebFilter(filterName = "authenFilter", urlPatterns = {"/users", "/user-add", "/user-edit"})
+@WebFilter(filterName = "authenFilter", urlPatterns = {"/users", "/user-add", "/user-edit", "/user-detail"
+													  	, "/groupworks"})
 public class AuthenticationFilter extends HttpFilter {
 
 	private UsersService userService = new UsersService();

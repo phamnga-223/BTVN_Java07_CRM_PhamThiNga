@@ -121,7 +121,8 @@ public class UsersRepository {
 				user.setEmail(result.getString("email"));
 				user.setPassword(result.getString("password"));
 				user.setFullname(result.getString("fullname"));
-				user.setRoleId(result.getInt("role_id"));				
+				user.setRoleId(result.getInt("role_id"));	
+				user.setAvatar(result.getString("avatar"));
 			}
 		} catch (Exception ex) {
 			System.err.println("Error!");
@@ -141,7 +142,7 @@ public class UsersRepository {
 			statement.setString(1, email);
 			statement.setString(2, password);
 			statement.setString(3, fullname);
-			statement.setInt(4, rowUpdate);
+			statement.setInt(4, roleId);
 			statement.setInt(5, id);
 			
 			rowUpdate = statement.executeUpdate();

@@ -10,13 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entity.RoleEntity;
+import entity.StatusEntity;
+import entity.TaskEntity;
 import entity.UserEntity;
+import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name = "userController", urlPatterns = { "/users", "/user-add", "/user-edit" })
+@WebServlet(name = "userController", urlPatterns = { "/users", "/user-add", "/user-edit", "/user-detail" })
 public class UserController extends HttpServlet {
 
 	private UsersService userService = new UsersService();
+	private TasksService taskService = new TasksService();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,6 +32,8 @@ public class UserController extends HttpServlet {
 			addUser(req, resp);
 		} else if (path.equals("/user-edit")) {
 			editUser(req, resp);
+		} else if (path.equals("/user-detail")) {
+			detailUser(req, resp);
 		}
 	}
 	
@@ -37,12 +43,14 @@ public class UserController extends HttpServlet {
 		
 		if (path.equals("/user-add")) {
 			addUserPost(req, resp);
+		} else if (path.equals("/user-edit")) {
+			editUserPost(req, resp);
 		}
 	}
 	
 	private void loadUsers(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String id = req.getParameter("id");
-		if (id != null) {
+		if (id != null && !req.getServletPath().contains("edit")) {
 			//Tinh nang xoa
 			userService.deleteUserById(Integer.parseInt(id));
 		}
@@ -101,7 +109,46 @@ public class UserController extends HttpServlet {
 			
 			return;
 		}
-	
+		
 		loadUsers(req, resp);
+	}
+	
+	private void detailUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int userId = Integer.parseInt(req.getParameter("id"));
+		UserEntity user = userService.findById(userId);
+		
+		if (user == null) {
+			loadUsers(req, resp);
+		}
+		
+		List<TaskEntity> listTask = taskService.findByUserId(userId);
+		List<TaskEntity> listNotStartTask = taskService.resumeTaskByStatusName(listTask, StatusEntity.STATUS_NOT_START);
+		List<TaskEntity> listInProgressTask = taskService.resumeTaskByStatusName(listTask, StatusEntity.STATUS_IN_PROGRESS);
+		List<TaskEntity> listFinishTask = taskService.resumeTaskByStatusName(listTask, StatusEntity.STATUS_FINISH);
+		int tasksSum = listTask.size();
+		String notStartPercent = "0";
+		String inProgressPercent = "0";
+		String finishPercent = "0";
+		if (tasksSum > 0) {
+			double notStart = ((double)listNotStartTask.size() / tasksSum) * 100;
+			double inProgress = ((double)listInProgressTask.size() / tasksSum) * 100;
+			double finish = ((double)listFinishTask.size() / tasksSum) * 100;
+			
+			String format = "%.2f";
+			notStartPercent = String.format(format, notStart);
+			inProgressPercent = String.format(format, inProgress);
+			finishPercent = String.format(format, finish);
+		}
+		
+		req.setAttribute("user", user);
+		req.setAttribute("listTask", listTask);
+		req.setAttribute("listNotStartTask", listNotStartTask);
+		req.setAttribute("listInProgressTask", listInProgressTask);
+		req.setAttribute("listFinishTask", listFinishTask);
+		req.setAttribute("notStartPercent", notStartPercent);
+		req.setAttribute("inProgressPercent", inProgressPercent);
+		req.setAttribute("finishPercent", finishPercent);
+		
+		req.getRequestDispatcher("user-details.jsp").forward(req, resp);
 	}
 }
