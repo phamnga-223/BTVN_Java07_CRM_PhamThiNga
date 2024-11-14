@@ -12,6 +12,7 @@ public class TaskEntity {
 	private int jobId;
 	private int statusId;
 	private String statusName;
+	private int countTask;
 	
 	public TaskEntity() {
 	}
@@ -78,5 +79,13 @@ public class TaskEntity {
 
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+
+	public int getCountTask() {
+		return countTask;
+	}
+
+	public void setCountTask(int countTask) {
+		this.countTask = countTask;
 	}
 }

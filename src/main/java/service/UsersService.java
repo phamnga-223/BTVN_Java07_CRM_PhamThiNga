@@ -111,5 +111,9 @@ public class UsersService {
 	public boolean updateUser(int id, String email, String password, String fullname, int roleId) {
 		return repository.update(id, email, MD5.genMd5(password), fullname, roleId) > 0;
 	}
+	
+	public List<UserEntity> findByJobId(int jobId) {
+		return repository.findByJobId(jobId);
+	}
 
 }

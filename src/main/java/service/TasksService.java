@@ -29,4 +29,12 @@ public class TasksService {
 		
 		return list;
 	}
+	
+	public List<TaskEntity> findByUserIdAndJobId(int userId, int jobId) {
+		return repository.findByUserIdAndJobId(userId, jobId);
+	}
+	
+	public List<TaskEntity> countTasksByStatus(int jobId) {
+		return repository.countTasksByStatus(jobId);
+	}
 }

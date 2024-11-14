@@ -41,4 +41,66 @@ public class TasksRepository {
 		
 		return list;
 	}
+
+	public List<TaskEntity> findByUserIdAndJobId(int userId, int jobId) {
+		List<TaskEntity> listTasks = new ArrayList<TaskEntity>();
+		String query = "SELECT *"
+				+ "FROM tasks t "
+				+ "JOIN status s ON s.id = t.status_id "
+				+ "WHERE t.user_id = ? "
+				+ "AND t.job_id = ? ";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, userId);
+			statement.setInt(2, jobId);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				TaskEntity task = new TaskEntity();
+				task.setId(result.getInt("t.id"));
+				task.setName(result.getString("t.name"));
+				task.setStartDate(result.getDate("t.start_date"));
+				task.setEndDate(result.getDate("t.end_date"));
+				task.setUserId(userId);
+				task.setJobId(jobId);
+				task.setStatusId(result.getInt("t.status_id"));
+				task.setStatusName(result.getString("s.name"));
+				listTasks.add(task);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error findByUserIdAndJobId!");
+			ex.printStackTrace();
+		}
+		return listTasks;
+	}
+
+	public List<TaskEntity> countTasksByStatus(int jobId) {
+		List<TaskEntity> listTasks = new ArrayList<TaskEntity>();
+		String query = "SELECT t.status_id, s.name, count(*) AS count_task "
+				+ "FROM tasks t "
+				+ "JOIN status s ON t.status_id = s.id "
+				+ "WHERE t.job_id = ? "
+				+ "GROUP BY t.status_id";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, jobId);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				TaskEntity task = new TaskEntity();
+				task.setStatusId(result.getInt("t.status_id"));
+				task.setStatusName(result.getString("s.name"));
+				task.setCountTask(result.getInt("count_task"));
+				listTasks.add(task);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error countTasksByStatus!");
+			ex.printStackTrace();
+		}
+		return listTasks;
+	}
 }

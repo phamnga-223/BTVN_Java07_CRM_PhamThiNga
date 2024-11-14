@@ -153,4 +153,34 @@ public class UsersRepository {
 		
 		return rowUpdate;
 	}
+
+	public List<UserEntity> findByJobId(int jobId) {
+		List<UserEntity> listUsers = new ArrayList<UserEntity>();
+		String query = "SELECT u.* "
+				+ "FROM jobs j "
+				+ "JOIN tasks t ON j.id = t.job_id "
+				+ "JOIN users u ON u.id = t.user_id "
+				+ "WHERE j.id = ? "
+				+ "GROUP BY u.id";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, jobId);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				UserEntity user = new UserEntity();
+				user.setId(result.getInt("id"));
+				user.setEmail(result.getString("email"));
+				user.setFullname(result.getString("fullname"));
+				user.setAvatar(result.getString("avatar"));
+				listUsers.add(user);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error findByJobId!");
+			ex.printStackTrace();
+		}
+		return listUsers;
+	}
 }
