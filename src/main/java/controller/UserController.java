@@ -50,7 +50,7 @@ public class UserController extends HttpServlet {
 	
 	private void loadUsers(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String id = req.getParameter("id");
-		if (id != null && !req.getServletPath().contains("edit")) {
+		if (id != null && !req.getServletPath().contains("edit") && !req.getServletPath().contains("detail")) {
 			//Tinh nang xoa
 			userService.deleteUserById(Integer.parseInt(id));
 		}

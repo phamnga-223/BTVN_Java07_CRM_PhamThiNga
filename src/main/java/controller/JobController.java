@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,8 @@ import service.JobsService;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name = "groupworkServlet", urlPatterns = {"/groupworks", "/groupwork-details", "/groupwork-edit"})
+@WebServlet(name = "groupworkServlet", urlPatterns = {"/groupworks", "/groupwork-details"
+		, "/groupwork-edit", "/groupwork-add"})
 public class JobController extends HttpServlet {
 
 	private JobsService jobService = new JobsService();
@@ -36,11 +37,31 @@ public class JobController extends HttpServlet {
 		} else if (path.equals("/groupwork-details")) {
 			detailGroupWorks(req, resp);
 		} else if (path.equals("/groupwork-edit")) {
-			editGroupWorks(req, resp);
+			editGroupWork(req, resp);
+		} else if (path.equals("/groupwork-add")) {
+			addGroupWork(req, resp);
+		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = req.getServletPath();
+		
+		if (path.equals("/groupwork-edit")) {
+			editGroupWorkPost(req, resp);
+		} else if (path.equals("/groupwork-add")) {
+			addGroupWorkPost(req, resp);
 		}
 	}
 	
 	private void loadGroupWorks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String path = req.getServletPath();
+		String id = req.getParameter("id");
+		if (id != null && !path.contains("edit") && !path.contains("detail")) {
+			//Tinh nang xoa
+			jobService.deleteJob(Integer.parseInt(id));
+		}
+		
 		List<JobEntity> listJobs = jobService.findAll();
 		
 		req.setAttribute("listJobs", listJobs);
@@ -50,7 +71,11 @@ public class JobController extends HttpServlet {
 	
 	private void detailGroupWorks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int jobId = Integer.parseInt(req.getParameter("id"));
+		
 		//Check job is exist?
+		if (!jobService.isExist(jobId)) {
+			loadGroupWorks(req, resp);
+		}
 		
 		List<TaskEntity> listTaskByStatus = taskService.countTasksByStatus(jobId);
 		String notStartPercent = "0";
@@ -95,9 +120,46 @@ public class JobController extends HttpServlet {
 		req.getRequestDispatcher("groupwork-details.jsp").forward(req, resp);
 	}
 	
-	private void editGroupWorks(HttpServletRequest req, HttpServletResponse resp) {
+	private void editGroupWork(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int jobId = Integer.parseInt(req.getParameter("id"));
 		
+		if (!jobService.isExist(jobId)) {
+			loadGroupWorks(req, resp);
+		}
 		
+		JobEntity job = jobService.findById(jobId).get(0);
+		
+		req.setAttribute("job", job);
+		
+		req.getRequestDispatcher("groupwork-edit.jsp").forward(req, resp);
+	}
+	
+	private void editGroupWorkPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("id"));
+		String name = req.getParameter("name");
+		Date startDate = Date.valueOf(req.getParameter("startDate"));
+		Date endDate = Date.valueOf(req.getParameter("endDate"));
+		
+		if (!jobService.updateJob(id, name, startDate, endDate)) {
+			editGroupWork(req, resp);
+		}
+		
+		loadGroupWorks(req, resp);
+	}
+	
+	private void addGroupWork(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.getRequestDispatcher("groupwork-add.jsp").forward(req, resp);
+	}
+	
+	private void addGroupWorkPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String name = req.getParameter("name");
+		Date startDate = Date.valueOf(req.getParameter("startDate"));
+		Date endDate = Date.valueOf(req.getParameter("endDate"));
+		
+		if (!jobService.insertJob(name, startDate, endDate)) {
+			addGroupWork(req, resp);
+		}
+		
+		loadGroupWorks(req, resp);
 	}
 }
