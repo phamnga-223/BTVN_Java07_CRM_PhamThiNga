@@ -103,4 +103,32 @@ public class TasksRepository {
 		}
 		return listTasks;
 	}
+	
+	public List<TaskEntity> findAll() {
+		List<TaskEntity> listTasks = new ArrayList<TaskEntity>();
+		String query = "SELECT * FROM tasks";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				TaskEntity task = new TaskEntity();
+				task.setId(result.getInt("id"));
+				task.setName(result.getString("name"));
+				task.setStartDate(result.getDate("start_date"));
+				task.setEndDate(result.getDate("end_date"));
+				task.setUserId(result.getInt("user_id"));
+				task.setJobId(result.getInt("job_id"));
+				task.setStatusId(result.getInt("status_id"));
+				listTasks.add(task);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error findAll!");
+			ex.printStackTrace();
+		}
+		
+		return listTasks;
+	}
 }
