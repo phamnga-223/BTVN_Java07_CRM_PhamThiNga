@@ -18,4 +18,19 @@ public class RolesService {
 		return null;
 	}
 	
+	public List<RoleEntity> findAll() {
+		return rolesRepository.findAll();
+	}
+	
+	public boolean insert(String name, String description) {
+		return (rolesRepository.insert(name, description) > 0);
+	}
+	
+	public boolean update(int id, String name, String description) {
+		return (rolesRepository.update(id, name, description) > 0);
+	}
+	
+	public boolean delete(int id) {
+		return (rolesRepository.delete(id) > 0);
+	}
 }
