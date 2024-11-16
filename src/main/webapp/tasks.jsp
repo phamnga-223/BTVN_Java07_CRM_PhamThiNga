@@ -83,7 +83,7 @@
 	                                            <td>${ task.endDate }</td>
 	                                            <td>${ task.statusName }</td>
 	                                            <td>
-	                                                <a href="tasks-edit?id=${ task.id }" class="btn btn-sm btn-primary">Sửa</a>
+	                                                <a href="task-edit?id=${ task.id }" class="btn btn-sm btn-primary">Sửa</a>
 	                                                <a href="tasks?id=${ task.id }" class="btn btn-sm btn-danger">Xóa</a>
 	                                                <a href="task-detail?id=${ task.id }" class="btn btn-sm btn-info">Xem</a>
 	                                            </td>

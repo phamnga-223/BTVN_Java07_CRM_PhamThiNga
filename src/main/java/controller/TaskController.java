@@ -19,7 +19,8 @@ import service.StatusService;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name="taskServlet", urlPatterns={"/tasks", "/task-add"})
+@WebServlet(name="taskServlet", urlPatterns={"/tasks", "/task-add", "/task-edit",
+		"/task-detail"})
 public class TaskController extends HttpServlet {
 
 	private TasksService taskService = new TasksService();
@@ -33,8 +34,12 @@ public class TaskController extends HttpServlet {
 		
 		if (path.equals("/tasks")) {
 			loadTasks(req, resp);
-		} if (path.equals("/task-add")) {
+		} else if (path.equals("/task-add")) {
 			addTask(req, resp);
+		} else if (path.equals("/task-edit")) {
+			editTask(req, resp);
+		} else if (path.equals("/task-detail")) {
+			detailTask(req, resp);
 		}
 	}
 	
@@ -44,6 +49,8 @@ public class TaskController extends HttpServlet {
 		
 		if (path.equals("/task-add")) {
 			addTaskPost(req, resp);
+		} else if (path.equals("/task-edit")) {
+				editTaskPost(req, resp);
 		}
 	}
 	
@@ -69,8 +76,14 @@ public class TaskController extends HttpServlet {
 		int jobId = Integer.parseInt(req.getParameter("jobId"));
 		String name = req.getParameter("name");
 		int userId = Integer.parseInt(req.getParameter("userId"));
-		Date startDate = Date.valueOf(req.getParameter("startDate"));
-		Date endDate = Date.valueOf(req.getParameter("endDate"));
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		
+		//Validate
+		if (name == null || name.equals("")) {
+			addTask(req, resp);
+			return;
+		}
 		
 		if (taskService.insert(jobId, name, userId, startDate, endDate)) {
 			loadTasks(req, resp);
@@ -78,5 +91,60 @@ public class TaskController extends HttpServlet {
 			addTask(req, resp);
 		}
 		
+	}
+	
+	private void editTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("id"));
+		List<TaskEntity> tasks = taskService.findById(id);
+		
+		if (tasks.size() > 0) {
+			List<UserEntity> users = userService.findAll();
+			List<JobEntity> jobs = jobService.findAll();
+			List<StatusEntity> statuses = statusService.findAll();
+			
+			req.setAttribute("task", tasks.get(0));
+			req.setAttribute("users", users);
+			req.setAttribute("jobs", jobs);
+			req.setAttribute("statuses", statuses);
+			
+			req.getRequestDispatcher("task-edit.jsp").forward(req, resp);
+		} else {
+			loadTasks(req, resp);
+		}
+	}
+	
+	private void editTaskPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("id"));
+		String name = req.getParameter("name");
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		int userId = Integer.parseInt(req.getParameter("userId"));
+		int jobId = Integer.parseInt(req.getParameter("jobId"));
+		int statusId = Integer.parseInt(req.getParameter("statusId"));
+		
+		//Validate
+		if (name == null || name.equals("")) {
+			editTask(req, resp);
+			return;
+		}
+		
+		if (taskService.update(id, name, startDate, endDate, userId, jobId, statusId)) {
+			loadTasks(req, resp);
+		} else {
+			editTask(req, resp);
+		}
+	}
+	
+	private void detailTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("id"));
+		List<TaskEntity> tasks = taskService.findByIdWithUserNJobNStatus(id);
+		
+		if (tasks.size() > 0) {
+			req.setAttribute("task", tasks.get(0));
+			
+			req.getRequestDispatcher("task-details.jsp").forward(req, resp);
+		} else {
+			loadTasks(req, resp);
+		}
 	}
 }

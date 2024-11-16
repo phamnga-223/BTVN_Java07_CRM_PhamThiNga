@@ -140,7 +140,7 @@ public class TasksRepository {
 		return listTasks;
 	}
 
-	public int insert(int jobId, String name, int userId, Date startDate, Date endDate, int statusId) {
+	public int insert(int jobId, String name, int userId, String startDate, String endDate, int statusId) {
 		int rowInserted = 0;
 		String query = "INSERT INTO tasks (name, start_date, end_date, user_id, job_id, status_id) VALUES (?, ?, ?, ?, ?, ?)";
 		Connection connection = MySQLConfig.getConnection();
@@ -148,8 +148,8 @@ public class TasksRepository {
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, name);
-			statement.setDate(2, startDate);
-			statement.setDate(3, endDate);
+			statement.setString(2, startDate);
+			statement.setString(3, endDate);
 			statement.setInt(4, userId);
 			statement.setInt(5, jobId);
 			statement.setInt(6, statusId);
@@ -182,6 +182,70 @@ public class TasksRepository {
 				task.setUserId(result.getInt("user_id"));
 				task.setJobId(result.getInt("job_id"));
 				task.setStatusId(result.getInt("status_id"));
+				
+				tasks.add(task);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error task findById!");
+			ex.printStackTrace();
+		}
+		
+		return tasks;
+	}
+
+	public int update(int id, String name, String startDate, String endDate,
+			int userId, int jobId, int statusId) {
+		int rowUpdated = 0;
+		String query = "UPDATE tasks SET name = ?, start_date = ?, end_date = ?, "
+				+ " user_id = ?, job_id = ?, status_id = ? "
+				+ " WHERE id = ?";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, name);
+			statement.setString(2, startDate);
+			statement.setString(3, endDate);
+			statement.setInt(4, userId);
+			statement.setInt(5, jobId);
+			statement.setInt(6, statusId);
+			statement.setInt(7, id);
+			
+			rowUpdated = statement.executeUpdate();
+		} catch (Exception ex) {
+			System.err.println("Error task update!");
+			ex.printStackTrace();
+		}
+		
+		return rowUpdated;
+	}
+
+	public List<TaskEntity> findByIdWithUserNJobNStatus(int id) {
+		List<TaskEntity> tasks = new ArrayList<TaskEntity>();
+		String query = "SELECT * FROM tasks t "
+				+ "JOIN users u ON t.user_id = u.id "
+				+ "JOIN jobs j ON t.job_id = j.id "
+				+ "JOIN status s ON t.status_id = s.id "
+				+ "WHERE t.id = ?";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, id);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				TaskEntity task = new TaskEntity();
+				task.setId(id);
+				task.setName(result.getString("t.name"));
+				task.setStartDate(result.getDate("t.start_date"));
+				task.setEndDate(result.getDate("t.end_date"));
+				task.setUserId(result.getInt("t.user_id"));
+				task.setJobId(result.getInt("t.job_id"));
+				task.setStatusId(result.getInt("t.status_id"));
+				task.setUserName(result.getString("u.fullname"));
+				task.setJobName(result.getString("j.name"));
+				task.setStatusName(result.getString("s.name"));
 				
 				tasks.add(task);
 			}

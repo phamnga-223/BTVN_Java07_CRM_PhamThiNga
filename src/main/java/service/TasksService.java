@@ -1,9 +1,11 @@
 package service;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.StringUtil;
 import entity.StatusEntity;
 import entity.TaskEntity;
 import repository.TasksRepository;
@@ -44,17 +46,42 @@ public class TasksService {
 		return repository.findAllWithUserNJobNStatus();
 	}
 	
-	public boolean insert(int jobId, String name, int userId, Date startDate, Date endDate) {
+	public boolean insert(int jobId, String name, int userId, String startDate, String endDate) throws UnsupportedEncodingException {
 		int statusId = statusService.findByName(StatusEntity.STATUS_NOT_START);
 		
 		if (statusId == 0) {
 			return false;
 		}
 		
-		return (repository.insert(jobId, name, userId, startDate, endDate, statusId) > 0);
+		if (startDate != null && startDate.equals("")) {
+			startDate = null;
+		}
+		
+		if (endDate != null && endDate.equals("")) {
+			endDate = null;
+		}
+		
+		return (repository.insert(jobId, StringUtil.convert(name), userId, startDate, endDate, statusId) > 0);
 	}
 	
 	public List<TaskEntity> findById(int id) {
 		return repository.findById(id);
+	}
+	
+	public boolean update(int id, String name, String startDate, String endDate, 
+			int userId, int jobId, int statusId) throws UnsupportedEncodingException {
+		if (startDate != null && startDate.equals("")) {
+			startDate = null;
+		}
+		
+		if (endDate != null && endDate.equals("")) {
+			endDate = null;
+		}
+		
+		return (repository.update(id, StringUtil.convert(name), startDate, endDate, userId, jobId, statusId) > 0);
+	}
+	
+	public List<TaskEntity> findByIdWithUserNJobNStatus(int id) {
+		return repository.findByIdWithUserNJobNStatus(id);
 	}
 }
