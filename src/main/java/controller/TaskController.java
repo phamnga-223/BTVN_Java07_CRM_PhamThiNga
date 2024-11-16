@@ -50,7 +50,9 @@ public class TaskController extends HttpServlet {
 		if (path.equals("/task-add")) {
 			addTaskPost(req, resp);
 		} else if (path.equals("/task-edit")) {
-				editTaskPost(req, resp);
+			editTaskPost(req, resp);
+		} else if (path.equals("/tasks")) {
+			deleteTaskPost(req, resp);
 		}
 	}
 	
@@ -146,5 +148,12 @@ public class TaskController extends HttpServlet {
 		} else {
 			loadTasks(req, resp);
 		}
+	}
+	
+	private void deleteTaskPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("id"));
+		taskService.delete(id);
+		
+		loadTasks(req, resp);
 	}
 }

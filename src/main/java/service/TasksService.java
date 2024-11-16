@@ -84,4 +84,8 @@ public class TasksService {
 	public List<TaskEntity> findByIdWithUserNJobNStatus(int id) {
 		return repository.findByIdWithUserNJobNStatus(id);
 	}
+	
+	public boolean delete(int id) {
+		return (repository.delete(id) > 0);
+	}
 }

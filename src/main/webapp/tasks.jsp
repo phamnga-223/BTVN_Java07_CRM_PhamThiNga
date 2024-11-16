@@ -82,10 +82,13 @@
 	                                            <td>${ task.startDate }</td>
 	                                            <td>${ task.endDate }</td>
 	                                            <td>${ task.statusName }</td>
-	                                            <td>
-	                                                <a href="task-edit?id=${ task.id }" class="btn btn-sm btn-primary">Sửa</a>
-	                                                <a href="tasks?id=${ task.id }" class="btn btn-sm btn-danger">Xóa</a>
-	                                                <a href="task-detail?id=${ task.id }" class="btn btn-sm btn-info">Xem</a>
+	                                            <td class="d-flex">
+	                                                <a href="task-edit?id=${ task.id }" class="btn btn-sm btn-primary mr-4">Sửa</a>
+	                                                <form action="tasks" method="post" class="mr-4">
+	                                                	<input name="id" value="${ task.id }" hidden/>
+	                                                	<button class="btn btn-sm btn-danger" type="submit">Xóa</button>
+	                                                </form>
+	                                                <a href="task-detail?id=${ task.id }" class="btn btn-sm btn-info mr-4">Xem</a>
 	                                            </td>
 	                                        </tr>
                                         </c:forEach>

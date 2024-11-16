@@ -256,4 +256,22 @@ public class TasksRepository {
 		
 		return tasks;
 	}
+	
+	public int delete(int id) {
+		int rowDeleted = 0;
+		String query = "DELETE FROM tasks WHERE id = ?";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, id);
+			
+			rowDeleted = statement.executeUpdate();
+		} catch (Exception ex) {
+			System.err.println("Error task delete!");
+			ex.printStackTrace();
+		}
+		
+		return rowDeleted;
+	}
 }

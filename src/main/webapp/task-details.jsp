@@ -21,6 +21,7 @@
     <link href="css/animate.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
     <!-- color CSS -->
     <link href="css/colors/blue-dark.css" id="theme" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,17 +56,30 @@
                         <div class="col-md-8 col-xs-12">                    
 	                        <div class="white-box">
 	                            <div class="message-center">
-		                        	<h5>${ task.id } - ${ task.name }</h5>
+		                        	<h5>${ task.id } - ${ task.name }</h5>		                        
 		                            <span class="mail-desc"></span>
-		                            <span class="time">Dự án: ${ task.jobName }</span>
-		                            </br>
-		                            <span class="time">Người thực hiện: ${ task.userName }</span>
-		                            </br>
-		                            <span class="time">Ngày bắt đầu: ${ task.startDate }</span>
-		                            </br>
-		                            <span class="time">Ngày kết thúc: ${ task.endDate }</span>
-		                            </br>
-		                            <span class="time">Tiến độ: ${ task.statusName }</span>	                                        
+		                        </div>
+		                       	<div class="row mb-10">		                       	
+		                            <div class="col-md-3">Dự án</div>
+		                            <div class="col-md-9">${ task.jobName }</div>
+		                        </div>
+		                        <div class="row mb-10">		                       	
+		                            <div class="col-md-3">Người thực hiện</div>
+		                            <div class="col-md-9">${ task.userName }</div>
+		                        </div>
+		                        <div class="row mb-10">		                       	
+		                            <div class="col-md-3">Ngày bắt đầu</div>
+		                            <div class="col-md-9">${ task.startDate }</div>
+		                        </div>
+		                        <div class="row mb-10">		                       	
+		                            <div class="col-md-3">Ngày kết thúc</div>
+		                         	<div class="col-md-9">${ task.endDate }</div>
+		                       	</div>
+		                        <div class="row mb-10">		                       	
+		                            <div class="col-md-3">Tiến độ</div>
+		                          	<div class="col-md-9">${ task.statusName }</div>
+		                       	</div>
+		                       	<div class="row">	                                        
 	                               	<a href="tasks" class="btn btn-primary">Quay lại</a>
 	                            </div>
 	                        </div>
