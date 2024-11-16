@@ -13,6 +13,8 @@ public class TaskEntity {
 	private int statusId;
 	private String statusName;
 	private int countTask;
+	private String userName;
+	private String jobName;
 	
 	public TaskEntity() {
 	}
@@ -87,5 +89,21 @@ public class TaskEntity {
 
 	public void setCountTask(int countTask) {
 		this.countTask = countTask;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
 	}
 }
