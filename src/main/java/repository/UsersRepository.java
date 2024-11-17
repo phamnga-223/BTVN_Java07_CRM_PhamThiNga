@@ -153,6 +153,27 @@ public class UsersRepository {
 		
 		return rowUpdate;
 	}
+	
+	public int update(int id, String email, String password, String fullname) {
+		int rowUpdate = 0;
+		String query = "UPDATE users set email = ?, password = ?, fullname = ? WHERE id = ?";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, email);
+			statement.setString(2, password);
+			statement.setString(3, fullname);
+			statement.setInt(4, id);
+			
+			rowUpdate = statement.executeUpdate();
+		} catch (Exception ex) {
+			System.err.println("Error!");
+			ex.printStackTrace();
+		}
+		
+		return rowUpdate;
+	}
 
 	public List<UserEntity> findByJobId(int jobId) {
 		List<UserEntity> listUsers = new ArrayList<UserEntity>();
@@ -183,4 +204,33 @@ public class UsersRepository {
 		}
 		return listUsers;
 	}
+	
+	public List<UserEntity> findByEmail(String email) {
+		List<UserEntity> list = new ArrayList<UserEntity>(); 
+
+		String query = "SELECT * FROM users u WHERE u.email = ?";
+		
+		Connection connection = MySQLConfig.getConnection();
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setString(1, email);
+			
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				UserEntity user = new UserEntity();
+				user.setId(result.getInt("id"));
+				user.setEmail(email);
+				user.setRoleId(result.getInt("role_id"));
+				user.setFullname(result.getString("fullname"));
+				
+				list.add(user);
+			}
+		} catch (Exception ex) {
+			System.err.println("Error!");
+			ex.printStackTrace();
+		}
+		
+		return list;
+	}
+	
 }

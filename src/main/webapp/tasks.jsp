@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="config.PathConfig" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +85,8 @@
 	                                            <td>${ task.statusName }</td>
 	                                            <td class="d-flex">
 	                                                <a href="task-edit?id=${ task.id }" class="btn btn-sm btn-primary mr-4">Sửa</a>
-	                                                <form action="tasks" method="post" class="mr-4">
+	                                                <form action="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK_DEL }"
+	                                                	 method="post" class="mr-4">
 	                                                	<input name="id" value="${ task.id }" hidden/>
 	                                                	<button class="btn btn-sm btn-danger" type="submit">Xóa</button>
 	                                                </form>

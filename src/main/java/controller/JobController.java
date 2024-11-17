@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.JobEntity;
 import entity.StatusEntity;
 import entity.TaskEntity;
@@ -20,8 +21,10 @@ import service.JobsService;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name = "groupworkServlet", urlPatterns = {"/groupworks", "/groupwork-details"
-		, "/groupwork-edit", "/groupwork-add"})
+@WebServlet(name = "groupworkServlet", urlPatterns = {
+		"/groupworks", "/groupwork-details"
+		, "/groupwork-edit", "/groupwork-add", PathConfig.PATH_JOB_DEL
+	})
 public class JobController extends HttpServlet {
 
 	private JobsService jobService = new JobsService();
@@ -32,7 +35,7 @@ public class JobController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/groupworks")) {
+		if (path.equals("/groupworks") || path.equals(PathConfig.PATH_JOB_DEL)) {
 			loadGroupWorks(req, resp);
 		} else if (path.equals("/groupwork-details")) {
 			detailGroupWorks(req, resp);
@@ -57,7 +60,7 @@ public class JobController extends HttpServlet {
 	private void loadGroupWorks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		String id = req.getParameter("id");
-		if (id != null && !path.contains("edit") && !path.contains("detail")) {
+		if (id != null && path.equals(PathConfig.PATH_JOB_DEL)) {
 			//Tinh nang xoa
 			jobService.deleteJob(Integer.parseInt(id));
 		}

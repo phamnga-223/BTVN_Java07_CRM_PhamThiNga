@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ page import="config.PathConfig" %>
 
      <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top m-b-0">
@@ -35,9 +37,10 @@
                                     <b class="hidden-xs">Cybersoft</b> 
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="profile.html">Thông tin cá nhân</a></li>
-                                    <li><a href="#">Thống kê công việc</a></li>
-                                    <li class="divider"></li>
+                                    <li><a href="${ pageContext.request.contextPath }${ PathConfig.PATH_PROFILE }">
+                                    	Thông tin cá nhân</a>
+                                    </li>
+	                                <li class="divider"></li>
                                     <li><a href="#">Đăng xuất</a></li>
                                 </ul>
                             </div>

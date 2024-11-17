@@ -116,4 +116,18 @@ public class UsersService {
 		return repository.findByJobId(jobId);
 	}
 
+	public UserEntity findByEmail(String email) {
+		UserEntity user = null;
+		List<UserEntity> users = repository.findByEmail(email);
+		
+		if (users.size() > 0) {
+			user = users.get(0);
+		}
+		
+		return user;
+	}
+	
+	public boolean updateUser(int id, String email, String password, String fullname) {
+		return repository.update(id, email, MD5.genMd5(password), fullname) > 0;
+	}
 }

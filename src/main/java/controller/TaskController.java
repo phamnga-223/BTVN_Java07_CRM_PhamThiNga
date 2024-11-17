@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.JobEntity;
 import entity.StatusEntity;
 import entity.TaskEntity;
@@ -19,8 +20,10 @@ import service.StatusService;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name="taskServlet", urlPatterns={"/tasks", "/task-add", "/task-edit",
-		"/task-detail"})
+@WebServlet(name="taskServlet", urlPatterns={
+		"/tasks", "/task-add", "/task-edit", PathConfig.PATH_TASK_DEL,
+		"/task-detail"
+})
 public class TaskController extends HttpServlet {
 
 	private TasksService taskService = new TasksService();
@@ -51,7 +54,7 @@ public class TaskController extends HttpServlet {
 			addTaskPost(req, resp);
 		} else if (path.equals("/task-edit")) {
 			editTaskPost(req, resp);
-		} else if (path.equals("/tasks")) {
+		} else if (path.equals(PathConfig.PATH_TASK_DEL)) {
 			deleteTaskPost(req, resp);
 		}
 	}

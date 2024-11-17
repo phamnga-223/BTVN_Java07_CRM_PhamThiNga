@@ -96,4 +96,8 @@ public class TasksService {
 	public List<Integer> countTaskByStatus() {
 		return repository.countTaskByStatus();
 	}
+	
+	public List<TaskEntity> findByUserIdWithJobNStatus(int userId) {
+		return repository.findByUserIdWithJobNStatus(userId);
+	}
 }

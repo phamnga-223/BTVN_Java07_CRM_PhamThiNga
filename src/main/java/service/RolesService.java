@@ -1,7 +1,9 @@
 package service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import config.StringUtil;
 import entity.RoleEntity;
 import repository.RolesRepository;
 
@@ -22,12 +24,12 @@ public class RolesService {
 		return rolesRepository.findAll();
 	}
 	
-	public boolean insert(String name, String description) {
-		return (rolesRepository.insert(name, description) > 0);
+	public boolean insert(String name, String description) throws UnsupportedEncodingException {
+		return (rolesRepository.insert(StringUtil.convert(name), StringUtil.convert(description)) > 0);
 	}
 	
-	public boolean update(int id, String name, String description) {
-		return (rolesRepository.update(id, name, description) > 0);
+	public boolean update(int id, String name, String description) throws UnsupportedEncodingException {
+		return (rolesRepository.update(id, StringUtil.convert(name), StringUtil.convert(description)) > 0);
 	}
 	
 	public boolean delete(int id) {

@@ -1,9 +1,7 @@
 package filter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.http.HttpRequest;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -14,19 +12,20 @@ import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.RoleEntity;
-import entity.UserEntity;
-import service.RolesService;
 import service.TasksService;
-import service.UsersService;
 
 //urlPatterns : Duong dan se kich hoat filter
-@WebFilter(filterName = "authenFilter", urlPatterns = {"/users", "/user-add", "/user-edit", "/user-detail"
-		, "/groupworks", "/groupwork-details", "/groupwork-edit", "/groupwork-add"})
+@WebFilter(filterName = "authenFilter", urlPatterns = {
+		PathConfig.PATH_USER, PathConfig.PATH_USER_ADD, PathConfig.PATH_USER_EDIT, PathConfig.PATH_USER_DTL,
+		PathConfig.PATH_JOB, PathConfig.PATH_JOB_ADD, PathConfig.PATH_JOB_EDIT, PathConfig.PATH_JOB_DTL, PathConfig.PATH_JOB_DEL,
+		PathConfig.PATH_TASK, PathConfig.PATH_TASK_ADD, PathConfig.PATH_TASK_EDIT, PathConfig.PATH_TASK_DTL, PathConfig.PATH_TASK_DEL,
+		PathConfig.PATH_ROLE, PathConfig.PATH_ROLE_ADD, PathConfig.PATH_ROLE_EDIT,
+		PathConfig.PATH_PROFILE, PathConfig.PATH_PROFILE_EDIT
+	})
 public class AuthenticationFilter extends HttpFilter {
-
-	private UsersService userService = new UsersService();
-	private RolesService roleService = new RolesService();
+	
 	private TasksService tasksService = new TasksService();
 	
 	/**
@@ -60,8 +59,12 @@ public class AuthenticationFilter extends HttpFilter {
 			req.getRequestDispatcher("login.jsp").forward(req, res);
 		}
 		
-		//Bước 2		
-		if (!role.equals(RoleEntity.ROLE_ADMIN)) {
+		//Bước 2: Check role
+		String path = req.getServletPath();
+		if (canAccessAsRole(role, path)) {
+			//Cho đi tiếp
+			chain.doFilter(req, res);
+		} else {
 			List<Integer> counts = tasksService.countTaskByStatus();
 			int sumTask = 0;
 			for (int count : counts) {
@@ -72,10 +75,31 @@ public class AuthenticationFilter extends HttpFilter {
 			req.setAttribute("sumTask", sumTask);
 			
 			req.getRequestDispatcher("index.jsp").forward(req, res);
-		}
+		}		
 		
-		//Bước 3: Cho đi tiếp
-		chain.doFilter(req, res);
 	}
 	
+	private boolean canAccessAsRole(String role, String path) {
+		boolean result = false;
+		
+		switch (role) {
+			case RoleEntity.ROLE_ADMIN:
+				if (PathConfig.PATH_ADMIN.contains(path)) {
+					result = true;
+				}
+				break;
+			case RoleEntity.ROLE_MANAGER:
+				if (PathConfig.PATH_MANAGER.contains(path)) {
+					result = true;
+				}
+			case RoleEntity.ROLE_USER:
+				if (PathConfig.PATH_AU_USER.contains(path)) {
+					result = true;
+				}
+			default:
+				break;
+		}
+		
+		return result;
+	}
 }

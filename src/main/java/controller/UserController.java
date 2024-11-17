@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.RoleEntity;
 import entity.StatusEntity;
 import entity.TaskEntity;
@@ -16,7 +17,9 @@ import entity.UserEntity;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name = "userController", urlPatterns = { "/users", "/user-add", "/user-edit", "/user-detail" })
+@WebServlet(name = "userController", urlPatterns = { 
+		PathConfig.PATH_USER, PathConfig.PATH_USER_ADD, PathConfig.PATH_USER_EDIT, PathConfig.PATH_USER_DTL
+	})
 public class UserController extends HttpServlet {
 
 	private UsersService userService = new UsersService();
@@ -26,14 +29,21 @@ public class UserController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/users")) {
-			loadUsers(req, resp);
-		} else if (path.equals("/user-add")) {
-			addUser(req, resp);
-		} else if (path.equals("/user-edit")) {
-			editUser(req, resp);
-		} else if (path.equals("/user-detail")) {
-			detailUser(req, resp);
+		switch (path) {
+			case PathConfig.PATH_USER:
+				loadUsers(req, resp);
+				break;
+			case PathConfig.PATH_USER_ADD:
+				addUser(req, resp);
+				break;
+			case PathConfig.PATH_USER_EDIT:
+				editUser(req, resp);
+				break;
+			case PathConfig.PATH_USER_DTL:
+				detailUser(req, resp);
+				break;
+			default: 
+				break;
 		}
 	}
 	
@@ -41,9 +51,9 @@ public class UserController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/user-add")) {
+		if (path.equals(PathConfig.PATH_USER_ADD)) {
 			addUserPost(req, resp);
-		} else if (path.equals("/user-edit")) {
+		} else if (path.equals(PathConfig.PATH_USER_EDIT)) {
 			editUserPost(req, resp);
 		}
 	}
@@ -151,4 +161,5 @@ public class UserController extends HttpServlet {
 		
 		req.getRequestDispatcher("user-details.jsp").forward(req, resp);
 	}
+
 }
