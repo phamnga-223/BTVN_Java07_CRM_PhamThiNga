@@ -222,6 +222,7 @@ public class UsersRepository {
 				user.setEmail(email);
 				user.setRoleId(result.getInt("role_id"));
 				user.setFullname(result.getString("fullname"));
+				user.setAvatar(result.getString("avatar"));
 				
 				list.add(user);
 			}

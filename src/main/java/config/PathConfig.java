@@ -33,7 +33,9 @@ public class PathConfig {
 	public static final List<String> PATH_ADMIN = List.of(
 		PATH_USER, PATH_USER_ADD, PATH_USER_EDIT, PATH_USER_DTL,
 		PATH_JOB, PATH_JOB_DTL,
-		PATH_ROLE, PATH_ROLE_ADD, PATH_ROLE_EDIT
+		PATH_ROLE, PATH_ROLE_ADD, PATH_ROLE_EDIT,
+		PATH_TASK, 
+		PATH_PROFILE, PATH_PROFILE_EDIT
 	);
 	
 	public static final List<String> PATH_MANAGER = List.of(
