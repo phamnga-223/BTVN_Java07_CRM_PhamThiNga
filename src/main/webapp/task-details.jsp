@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="config.PathConfig" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +82,7 @@
 		                          	<div class="col-md-9">${ task.statusName }</div>
 		                       	</div>
 		                       	<div class="row">	                                        
-	                               	<a href="tasks" class="btn btn-primary">Quay lại</a>
+	                               	<a href="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK }" class="btn btn-primary">Quay lại</a>
 	                            </div>
 	                        </div>
                         </div>

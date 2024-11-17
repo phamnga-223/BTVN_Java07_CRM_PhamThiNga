@@ -3,6 +3,9 @@ package config;
 import java.util.List;
 
 public class PathConfig {
+	public static final String PATH_LOGIN = "/login";
+	public static final String PATH_LOGOUT = "/logout";
+	
 	public static final String PATH_USER = "/users";
 	public static final String PATH_USER_ADD = "/user-add";
 	public static final String PATH_USER_EDIT = "/user-edit";

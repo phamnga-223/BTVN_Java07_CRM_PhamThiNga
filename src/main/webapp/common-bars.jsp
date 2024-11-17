@@ -41,7 +41,7 @@
                                     	Thông tin cá nhân</a>
                                     </li>
 	                                <li class="divider"></li>
-                                    <li><a href="#">Đăng xuất</a></li>
+                                    <li><a href="${ pageContext.request.contextPath }${ PathConfig.PATH_LOGOUT }">Đăng xuất</a></li>
                                 </ul>
                             </div>
                         </li>

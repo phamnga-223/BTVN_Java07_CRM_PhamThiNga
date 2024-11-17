@@ -24,16 +24,30 @@ public class JobsService {
 		return (listJobs.size() > 0);
 	}
 	
-	public boolean insertJob(String name, Date startDate, Date endDate) throws UnsupportedEncodingException {
+	public boolean insertJob(String name, String startDate, String endDate) throws UnsupportedEncodingException {
 		byte[] nameBytes = name.getBytes("ISO-8859-1");
 		name = new String(nameBytes);
+		
+		if (startDate != null && startDate.equals("")) {
+			startDate = null;
+		} 
+		if (endDate != null && endDate.equals("")) {
+			endDate = null;
+		}
 		
 		return (repository.insert(name, startDate, endDate) > 0);
 	}
 	
-	public boolean updateJob(int id, String name, Date startDate, Date endDate) throws UnsupportedEncodingException {
+	public boolean updateJob(int id, String name, String startDate, String endDate) throws UnsupportedEncodingException {
 		byte[] nameBytes = name.getBytes("ISO-8859-1"); 
 		name = new String(nameBytes);
+		
+		if (startDate != null && startDate.equals("")) {
+			startDate = null;
+		} 
+		if (endDate != null && endDate.equals("")) {
+			endDate = null;
+		}
 
 		return (repository.update(id, name, startDate, endDate) > 0);
 	}

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page import="config.PathConfig" %>
 
 <!DOCTYPE html>
@@ -51,7 +52,8 @@
                         <h4 class="page-title">Danh sách công việc</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a href="task-add" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK_ADD }" 
+                        	class="btn btn-sm btn-success">Thêm mới</a>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -84,13 +86,15 @@
 	                                            <td>${ task.endDate }</td>
 	                                            <td>${ task.statusName }</td>
 	                                            <td class="d-flex">
-	                                                <a href="task-edit?id=${ task.id }" class="btn btn-sm btn-primary mr-4">Sửa</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK_EDIT }?id=${ task.id }" 
+	                                                	class="btn btn-sm btn-primary mr-4">Sửa</a>
 	                                                <form action="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK_DEL }"
 	                                                	 method="post" class="mr-4">
 	                                                	<input name="id" value="${ task.id }" hidden/>
 	                                                	<button class="btn btn-sm btn-danger" type="submit">Xóa</button>
 	                                                </form>
-	                                                <a href="task-detail?id=${ task.id }" class="btn btn-sm btn-info mr-4">Xem</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_TASK_DTL }?id=${ task.id }" 
+	                                                	class="btn btn-sm btn-info mr-4">Xem</a>
 	                                            </td>
 	                                        </tr>
                                         </c:forEach>

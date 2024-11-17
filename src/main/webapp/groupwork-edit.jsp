@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
     
+<%@ page import="config.PathConfig" %>
+    
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,7 +50,8 @@
                     <div class="col-md-2 col-12"></div>
                     <div class="col-md-8 col-xs-12">
                         <div class="white-box">
-                            <form class="form-horizontal form-material" action="groupwork-edit" method="post">
+                            <form class="form-horizontal form-material" action="${ pageContext.request.contextPath }${ PathConfig.PATH_JOB_EDIT }" 
+                            	method="post">
                             	<div class="form-group">
                                     <label class="col-md-12">Mã dự án</label>
                                     <div class="col-md-12">
@@ -80,7 +83,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-success">Lưu lại</button>
-                                        <a href="groupworks" class="btn btn-primary">Quay lại</a>
+                                        <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_JOB }" class="btn btn-primary">Quay lại</a>
                                     </div>
                                 </div>
                             </form>

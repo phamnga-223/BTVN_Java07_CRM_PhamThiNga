@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import config.PathConfig;
-import entity.RoleEntity;
 import entity.StatusEntity;
 import entity.TaskEntity;
 import entity.UserEntity;

@@ -1,17 +1,20 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import config.PathConfig;
 import entity.JobEntity;
+import entity.RoleEntity;
 import entity.StatusEntity;
 import entity.TaskEntity;
 import entity.UserEntity;
@@ -21,8 +24,8 @@ import service.TasksService;
 import service.UsersService;
 
 @WebServlet(name="taskServlet", urlPatterns={
-		"/tasks", "/task-add", "/task-edit", PathConfig.PATH_TASK_DEL,
-		"/task-detail"
+		PathConfig.PATH_TASK, PathConfig.PATH_TASK_ADD, PathConfig.PATH_TASK_EDIT, 
+		PathConfig.PATH_TASK_DTL, PathConfig.PATH_TASK_DEL
 })
 public class TaskController extends HttpServlet {
 
@@ -35,14 +38,21 @@ public class TaskController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/tasks")) {
-			loadTasks(req, resp);
-		} else if (path.equals("/task-add")) {
-			addTask(req, resp);
-		} else if (path.equals("/task-edit")) {
-			editTask(req, resp);
-		} else if (path.equals("/task-detail")) {
-			detailTask(req, resp);
+		switch (path) {
+			case PathConfig.PATH_TASK:
+				loadTasks(req, resp);
+				break;
+			case PathConfig.PATH_TASK_ADD:
+				addTask(req, resp);
+				break;
+			case PathConfig.PATH_TASK_EDIT:
+				editTask(req, resp);
+				break;
+			case PathConfig.PATH_TASK_DTL:
+				detailTask(req, resp);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -50,17 +60,48 @@ public class TaskController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/task-add")) {
-			addTaskPost(req, resp);
-		} else if (path.equals("/task-edit")) {
-			editTaskPost(req, resp);
-		} else if (path.equals(PathConfig.PATH_TASK_DEL)) {
-			deleteTaskPost(req, resp);
+		switch (path) {
+			case PathConfig.PATH_TASK_ADD:
+				addTaskPost(req, resp);
+				break;
+			case PathConfig.PATH_TASK_EDIT:
+				editTaskPost(req, resp);
+				break;
+			case PathConfig.PATH_TASK_DEL:
+				deleteTaskPost(req, resp);
+				break;
+			default:
+				break;
 		}
 	}
 	
 	private void loadTasks(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<TaskEntity> listTasks = taskService.findAll();
+		Cookie[] cookies = req.getCookies();
+		if (cookies == null) {
+			req.getRequestDispatcher("index.jsp").forward(req, resp);
+			return;
+		}
+		String role = null;
+		String email = null;
+		for (Cookie c : cookies) {
+			if (c.getName().equals("role")) {
+				role = URLDecoder.decode(c.getValue(), "UTF-8");
+			} else if (c.getName().equals("email")) {
+				email = URLDecoder.decode(c.getValue(), "UTF-8");
+			}
+		}
+
+		List<TaskEntity> listTasks = new ArrayList<TaskEntity>();
+		if (role != null && role.equals(RoleEntity.ROLE_USER)) {
+			UserEntity user = userService.findByEmail(email);
+			if (user == null) {
+				req.getRequestDispatcher("index.jsp").forward(req, resp);
+				return;
+			}
+			listTasks = taskService.findByUserId(user.getId());
+		} else {		
+			listTasks = taskService.findAll();
+		}
 		
 		req.setAttribute("tasks", listTasks);
 		

@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="config.PathConfig" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +52,7 @@
                         <h4 class="page-title">Danh sách quyền</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a href="role-add" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_ROLE_ADD }" class="btn btn-sm btn-success">Thêm mới</a>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -75,8 +77,9 @@
 	                                            <td>${ role.name }</td>
 	                                            <td>${ role.description }</td>
 	                                            <td class="d-flex">
-	                                                <a href="role-edit?id=${ role.id }" class="btn btn-sm btn-primary mr-4">Sửa</a>
-	                                                <form action="roles" method="post" class="mr-4">
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_ROLE_EDIT }?id=${ role.id }" 
+	                                                	class="btn btn-sm btn-primary mr-4">Sửa</a>
+	                                                <form action="${ pageContext.request.contextPath }${ PathConfig.PATH_ROLE }" method="post" class="mr-4">
 	                                                	<input name="id" value="${ role.id }" hidden/>
 	                                                	<button class="btn btn-sm btn-danger" type="submit">Xóa</a>
 	                                                </form>

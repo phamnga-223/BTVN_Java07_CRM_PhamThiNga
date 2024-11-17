@@ -12,35 +12,41 @@ import entity.TaskEntity;
 
 public class TasksRepository {
 
-	public List<TaskEntity> findByUserId(int userid) {
-		List<TaskEntity> list = new ArrayList<TaskEntity>();
-		String query = "SELECT * FROM tasks t JOIN status s ON t.status_id = s.id WHERE t.user_id = ?";
+	public List<TaskEntity> findAllByUserIdWithUserNJobNStatus(int userId) {
+		List<TaskEntity> listTasks = new ArrayList<TaskEntity>();
+		String query = "SELECT * FROM tasks t "
+				+ "JOIN users u ON t.user_id = u.id "
+				+ "JOIN jobs j ON t.job_id = j.id "
+				+ "JOIN status s ON t.status_id = s.id "
+				+ "WHERE t.user_id = ? ";
 		Connection connection = MySQLConfig.getConnection();
 		
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, userid);
+			statement.setInt(1, userId);
 			ResultSet result = statement.executeQuery();
 			
 			while (result.next()) {
 				TaskEntity task = new TaskEntity();
-				task.setId(result.getInt("t.id"));
-				task.setName(result.getString("t.name"));
-				task.setStartDate(result.getDate("t.start_date"));
-				task.setEndDate(result.getDate("t.end_date"));
-				task.setUserId(userid);
-				task.setJobId(result.getInt("t.job_id"));
-				task.setStatusId(result.getInt("t.status_id"));
+				task.setId(result.getInt("id"));
+				task.setName(result.getString("name"));
+				task.setStartDate(result.getDate("start_date"));
+				task.setEndDate(result.getDate("end_date"));
+				task.setUserId(result.getInt("user_id"));
+				task.setJobId(result.getInt("job_id"));
+				task.setStatusId(result.getInt("status_id"));
+				task.setUserName(result.getString("u.fullname"));
+				task.setJobName(result.getString("j.name"));
 				task.setStatusName(result.getString("s.name"));
 				
-				list.add(task);
+				listTasks.add(task);
 			}
 		} catch (Exception ex) {
-			System.err.println("Error!");
+			System.err.println("Error findAllByUserIdWithUserNJobNStatus!");
 			ex.printStackTrace();
 		}
 		
-		return list;
+		return listTasks;
 	}
 
 	public List<TaskEntity> findByUserIdAndJobId(int userId, int jobId) {

@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.RoleEntity;
-import entity.StatusEntity;
 import entity.UserEntity;
 import service.RolesService;
 import service.TasksService;
 import service.UsersService;
 
-@WebServlet(name = "loginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "loginServlet", urlPatterns = {PathConfig.PATH_LOGIN})
 public class LoginController extends HttpServlet {
 
 	private UsersService usersService = new UsersService();
@@ -42,20 +42,22 @@ public class LoginController extends HttpServlet {
 		String remember = "";
 		
 		Cookie[] cookies = req.getCookies();
-		for(Cookie item : cookies) {
-			String name = item.getName();
-			String value = item.getValue();
-			
-			if (name.equals("email")) {
-				email = value;
-			}
-			
-			if (name.equals("password")) {
-				password = value;
-			} 
-			
-			if (name.equals("remember")) {
-				remember = value;
+		if (cookies != null) {
+			for(Cookie item : cookies) {
+				String name = item.getName();
+				String value = item.getValue();
+				
+				if (name.equals("email")) {
+					email = value;
+				}
+				
+				if (name.equals("password")) {
+					password = value;
+				} 
+				
+				if (name.equals("remember")) {
+					remember = value;
+				}
 			}
 		}
 		

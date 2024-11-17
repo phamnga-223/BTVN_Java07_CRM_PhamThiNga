@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="config.PathConfig" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +52,8 @@
                         <h4 class="page-title">Danh sách thành viên</h4>
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-                        <a href="user-add" class="btn btn-sm btn-success">Thêm mới</a>
+                        <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_USER_ADD }" 
+                        	class="btn btn-sm btn-success">Thêm mới</a>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -77,9 +80,12 @@
 	                                            <td>${ user.email }</td>
 	                                            <td>${ user.roleName }</td>
 	                                            <td>
-	                                                <a href="user-edit?id=${ user.id }" class="btn btn-sm btn-primary">Sửa</a>
-	                                                <a href="users?id=${ user.id }" class="btn btn-sm btn-danger">Xóa</a>
-	                                                <a href="user-detail?id=${ user.id }" class="btn btn-sm btn-info">Xem</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_USER_EDIT }?id=${ user.id }" 
+	                                                	class="btn btn-sm btn-primary">Sửa</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_USER }?id=${ user.id }" 
+	                                                	class="btn btn-sm btn-danger">Xóa</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_USER_DTL }?id=${ user.id }" 
+	                                                	class="btn btn-sm btn-info">Xem</a>
 	                                            </td>
 	                                        </tr>
                                     	</c:forEach>

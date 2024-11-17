@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page import="entity.StatusEntity" %>
+<%@ page import="config.PathConfig" %>
     
 <!DOCTYPE html>
 <!--
@@ -55,7 +57,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
                         <ol class="breadcrumb">
-                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="${ pageContext.request.contextPath }">Dashboard</a></li>
                             <li class="active">Blank Page</li>
                         </ol>
                     </div>

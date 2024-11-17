@@ -63,7 +63,7 @@ public class JobsRepository {
 		return listJobs;
 	}
 	
-	public int update(int id, String name, Date startDate, Date endDate) {
+	public int update(int id, String name, String startDate, String endDate) {
 		int rowUpdate = 0;
 		String query = "UPDATE jobs SET name = ?, start_date = ?, end_date = ? WHERE id = ?";
 		Connection connection = MySQLConfig.getConnection();
@@ -71,8 +71,8 @@ public class JobsRepository {
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, name);
-			statement.setDate(2, startDate);
-			statement.setDate(3, endDate);
+			statement.setString(2, startDate);
+			statement.setString(3, endDate);
 			statement.setInt(4, id);
 			
 			rowUpdate = statement.executeUpdate();
@@ -84,7 +84,7 @@ public class JobsRepository {
 		return rowUpdate;
 	}
 	
-	public int insert(String name, Date startDate, Date endDate) {
+	public int insert(String name, String startDate, String endDate) {
 		int rowInsert = 0;
 		String query = "INSERT INTO jobs(name, start_date, end_date) VALUES (?, ?, ?)";
 		Connection connection = MySQLConfig.getConnection();
@@ -92,8 +92,8 @@ public class JobsRepository {
 		try {
 			PreparedStatement statement = connection.prepareStatement(query);
 			statement.setString(1, name);
-			statement.setDate(2, startDate);
-			statement.setDate(3, endDate);
+			statement.setString(2, startDate);
+			statement.setString(3, endDate);
 			
 			rowInsert = statement.executeUpdate();
 		} catch (Exception ex) {

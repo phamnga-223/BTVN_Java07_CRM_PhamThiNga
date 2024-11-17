@@ -20,7 +20,7 @@ public class TasksService {
 	private StatusService statusService = new StatusService();
 	
 	public List<TaskEntity> findByUserId(int userId) {
-		return repository.findByUserId(userId);
+		return repository.findAllByUserIdWithUserNJobNStatus(userId);
 	}
 	
 	public List<TaskEntity> resumeTaskByStatusName(List<TaskEntity> listTask, String statusName) {

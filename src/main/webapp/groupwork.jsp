@@ -79,10 +79,12 @@
 	                                            <td>${ job.startDate }</td>
 	                                            <td>${ job.endDate }</td>
 	                                            <td>
-	                                                <a href="groupwork-edit?id=${ job.id }" class="btn btn-sm btn-primary">Sửa</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_JOB_EDIT }?id=${ job.id }" 
+	                                                	class="btn btn-sm btn-primary">Sửa</a>
 	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_JOB_DEL }?id=${ job.id }" 
 	                                                	class="btn btn-sm btn-danger">Xóa</a>
-	                                                <a href="groupwork-details?id=${ job.id }" class="btn btn-sm btn-info">Xem</a>
+	                                                <a href="${ pageContext.request.contextPath }${ PathConfig.PATH_JOB_DTL }?id=${ job.id }" 
+	                                                	class="btn btn-sm btn-info">Xem</a>
 	                                            </td>
 	                                        </tr>
                                         </c:forEach>

@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import config.PathConfig;
 import entity.RoleEntity;
 import service.RolesService;
 
-@WebServlet(name="roleServlet", urlPatterns={"/roles", "/role-add", "/role-edit"})
+@WebServlet(name="roleServlet", urlPatterns={ 
+	PathConfig.PATH_ROLE, PathConfig.PATH_ROLE_ADD, PathConfig.PATH_ROLE_EDIT
+})
 public class RoleController extends HttpServlet {
 	
 	private RolesService roleService = new RolesService();
@@ -22,13 +25,13 @@ public class RoleController extends HttpServlet {
 		String path = req.getServletPath();
 		
 		switch(path) {
-			case "/roles":
+			case PathConfig.PATH_ROLE:
 				loadRoles(req, resp);
 				break;
-			case "/role-add":
+			case PathConfig.PATH_ROLE_ADD:
 				addRole(req, resp);
 				break;
-			case "/role-edit":
+			case PathConfig.PATH_ROLE_EDIT:
 				editRole(req, resp);
 				break;
 			default:
@@ -41,13 +44,13 @@ public class RoleController extends HttpServlet {
 		String path = req.getServletPath();
 		
 		switch(path) {
-			case "/role-add":
+			case PathConfig.PATH_ROLE_ADD:
 				addRolePost(req, resp);
 				break;
-			case "/role-edit":
+			case PathConfig.PATH_ROLE_EDIT:
 				editRolePost(req, resp);
 				break;
-			case "/roles":
+			case PathConfig.PATH_ROLE:
 				deleteRolePost(req, resp);
 				break;
 			default:

@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,7 @@ import service.TasksService;
 import service.UsersService;
 
 @WebServlet(name = "groupworkServlet", urlPatterns = {
-		"/groupworks", "/groupwork-details"
-		, "/groupwork-edit", "/groupwork-add", PathConfig.PATH_JOB_DEL
+		PathConfig.PATH_JOB, PathConfig.PATH_JOB_DTL, PathConfig.PATH_JOB_ADD, PathConfig.PATH_JOB_EDIT, PathConfig.PATH_JOB_DEL
 	})
 public class JobController extends HttpServlet {
 
@@ -35,14 +33,21 @@ public class JobController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/groupworks") || path.equals(PathConfig.PATH_JOB_DEL)) {
-			loadGroupWorks(req, resp);
-		} else if (path.equals("/groupwork-details")) {
-			detailGroupWorks(req, resp);
-		} else if (path.equals("/groupwork-edit")) {
-			editGroupWork(req, resp);
-		} else if (path.equals("/groupwork-add")) {
-			addGroupWork(req, resp);
+		switch (path) {
+			case PathConfig.PATH_JOB, PathConfig.PATH_JOB_DEL:
+				loadGroupWorks(req, resp);
+				break;
+			case PathConfig.PATH_JOB_DTL:
+				detailGroupWorks(req, resp);
+				break;
+			case PathConfig.PATH_JOB_ADD:
+				addGroupWork(req, resp);
+				break;
+			case PathConfig.PATH_JOB_EDIT:
+				editGroupWork(req, resp);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -50,10 +55,15 @@ public class JobController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = req.getServletPath();
 		
-		if (path.equals("/groupwork-edit")) {
-			editGroupWorkPost(req, resp);
-		} else if (path.equals("/groupwork-add")) {
-			addGroupWorkPost(req, resp);
+		switch (path) {
+			case PathConfig.PATH_JOB_EDIT:
+				editGroupWorkPost(req, resp);
+				break;
+			case PathConfig.PATH_JOB_ADD:
+				addGroupWorkPost(req, resp);
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -140,11 +150,17 @@ public class JobController extends HttpServlet {
 	private void editGroupWorkPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int id = Integer.parseInt(req.getParameter("id"));
 		String name = req.getParameter("name");
-		Date startDate = Date.valueOf(req.getParameter("startDate"));
-		Date endDate = Date.valueOf(req.getParameter("endDate"));
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		
+		if (name == null || name.equals("")) {
+			editGroupWork(req, resp);
+			return;
+		}
 		
 		if (!jobService.updateJob(id, name, startDate, endDate)) {
 			editGroupWork(req, resp);
+			return;
 		}
 		
 		loadGroupWorks(req, resp);
@@ -156,11 +172,17 @@ public class JobController extends HttpServlet {
 	
 	private void addGroupWorkPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String name = req.getParameter("name");
-		Date startDate = Date.valueOf(req.getParameter("startDate"));
-		Date endDate = Date.valueOf(req.getParameter("endDate"));
+		String startDate = req.getParameter("startDate");
+		String endDate = req.getParameter("endDate");
+		
+		if (name == null || name.equals("")) {
+			addGroupWork(req, resp);
+			return;
+		}
 		
 		if (!jobService.insertJob(name, startDate, endDate)) {
 			addGroupWork(req, resp);
+			return;
 		}
 		
 		loadGroupWorks(req, resp);
