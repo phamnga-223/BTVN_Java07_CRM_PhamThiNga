@@ -1,10 +1,14 @@
 package service;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import config.MySQLConfig;
 import config.StringUtil;
 import entity.StatusEntity;
 import entity.TaskEntity;
@@ -87,5 +91,9 @@ public class TasksService {
 	
 	public boolean delete(int id) {
 		return (repository.delete(id) > 0);
+	}
+	
+	public List<Integer> countTaskByStatus() {
+		return repository.countTaskByStatus();
 	}
 }

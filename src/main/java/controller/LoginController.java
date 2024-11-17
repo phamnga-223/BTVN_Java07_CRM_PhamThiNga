@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entity.RoleEntity;
+import entity.StatusEntity;
 import entity.UserEntity;
 import service.RolesService;
+import service.TasksService;
 import service.UsersService;
 
 @WebServlet(name = "loginServlet", urlPatterns = {"/login"})
@@ -21,6 +24,7 @@ public class LoginController extends HttpServlet {
 
 	private UsersService usersService = new UsersService();
 	private RolesService rolesService = new RolesService();
+	private TasksService tasksService = new TasksService();
 	
 	/**
 	 * 
@@ -88,6 +92,15 @@ public class LoginController extends HttpServlet {
 		}
 		
 		if (isSuccess) {
+			List<Integer> counts = tasksService.countTaskByStatus();
+			int sumTask = 0;
+			for (int count : counts) {
+				sumTask += count;
+			}
+			
+			req.setAttribute("counts", counts);
+			req.setAttribute("sumTask", sumTask);
+			
 			req.getRequestDispatcher("index.jsp").forward(req, resp);
 		} else {
 			doGet(req, resp);

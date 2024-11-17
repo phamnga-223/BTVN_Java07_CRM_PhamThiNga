@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.http.HttpRequest;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import entity.RoleEntity;
 import entity.UserEntity;
 import service.RolesService;
+import service.TasksService;
 import service.UsersService;
 
 //urlPatterns : Duong dan se kich hoat filter
@@ -25,6 +27,7 @@ public class AuthenticationFilter extends HttpFilter {
 
 	private UsersService userService = new UsersService();
 	private RolesService roleService = new RolesService();
+	private TasksService tasksService = new TasksService();
 	
 	/**
 	 * 
@@ -59,6 +62,15 @@ public class AuthenticationFilter extends HttpFilter {
 		
 		//Bước 2		
 		if (!role.equals(RoleEntity.ROLE_ADMIN)) {
+			List<Integer> counts = tasksService.countTaskByStatus();
+			int sumTask = 0;
+			for (int count : counts) {
+				sumTask += count;
+			}
+			
+			req.setAttribute("counts", counts);
+			req.setAttribute("sumTask", sumTask);
+			
 			req.getRequestDispatcher("index.jsp").forward(req, res);
 		}
 		

@@ -274,4 +274,27 @@ public class TasksRepository {
 		
 		return rowDeleted;
 	}
+	
+	public List<Integer> countTaskByStatus() {
+		List<Integer> count = new ArrayList<>();
+		String query = "SELECT count(t.status_id) AS count_task FROM tasks t "
+				+ "RIGHT JOIN status s ON t.status_id = s.id "
+				+ "GROUP BY s.id "
+				+ "ORDER BY s.id ASC";
+		Connection connection = MySQLConfig.getConnection();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(query);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				count.add(result.getInt("count_task"));
+			}
+		} catch (Exception ex) {
+			System.err.println("Error task countTaskByStatusName!");
+			ex.printStackTrace();
+		}
+		
+		return count;
+	}
 }
